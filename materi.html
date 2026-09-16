@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Materi Pembelajaran — Dafina Putri Hardina</title>
+<script>document.documentElement.classList.add('js');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="materi-portal">
+
+<header class="header" id="siteHeader">
+  <div class="container header-inner">
+    <a href="index.html" class="header-brand">
+      <span class="header-brand-title">Materi Pembelajaran</span>
+      <span class="header-brand-sub">Pilih mata kuliah untuk mulai belajar</span>
+    </a>
+    <nav class="header-nav" id="headerNav">
+      <a href="index.html">Dashboard</a>
+      <a href="materi.html" class="active">Materi</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Buka menu" aria-expanded="false">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="container">
+  <section class="page-intro" style="padding-top:48px">
+    <span class="eyebrow">MATERI SEMESTER GASAL 2026/2027</span>
+    <h1>Pilih Mata Kuliah</h1>
+    <p>Tujuh mata kuliah, masing-masing punya halaman sendiri dengan navigasi pertemuan, progress tracker, dan akses PDF dari Google Drive.</p>
+  </section>
+
+  <section style="padding-bottom:64px">
+    <div class="materi-grid" id="materiGrid"></div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-brand"><span class="footer-brand-title">Jadwal Kuliah</span><span class="footer-brand-sub">Semester Gasal 2026/2027</span></div>
+    <div class="footer-divider"></div>
+    <div class="footer-meta">
+      <div class="footer-meta-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Dafina Putri Hardina — L200260179</span></div>
+      <span class="footer-tagline">Academic schedule dashboard • Kurikulum 2022</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/data.js"></script>
+<script src="assets/materi.js"></script>
+<script src="assets/app.js"></script>
+</html>
