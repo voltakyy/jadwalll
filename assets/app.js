@@ -129,6 +129,7 @@ function initTabs(){
 
 function initSilabus(){
   const sidebar=document.getElementById('silabusSidebar'); if(!sidebar) return;
+  if(typeof MATERI==='undefined'){sidebar.innerHTML='<div style="padding:24px;font-size:13px;color:var(--ts);text-align:center">Materi belum tersedia</div>';return;}
   const withSilabus=KRS.filter(c=>MATERI.find(m=>m.kode===c.kode));
   sidebar.innerHTML='<div class="silabus-sidebar-title">Daftar Mata Kuliah</div>'+
     withSilabus.map((c,i)=>`<button class="silabus-item ${i===0?'active':''}" data-kode="${c.kode}">
@@ -146,12 +147,13 @@ function initSilabus(){
 }
 function renderSilabusMain(kode){
   const container=document.getElementById('silabusMain'); if(!container) return;
+  if(typeof MATERI==='undefined') return;
   const materi=MATERI.find(m=>m.kode===kode);
   if(!materi){
     container.innerHTML='<div class="silabus-header"><h3>Belum tersedia</h3></div>';
     return;
   }
-  const slugs={'TIF3221308':'logika','TIF3221104':'praktikum','TIF3221305':'kalkulus','TIF3221206':'kepemimpinan','TIF3221307':'pemvis','TIF1221202':'eap'};
+  const slugs={'TIF3221308':'logika','TIF3221104':'praktikum','TIF3221305':'kalkulus','TIF3221206':'kepemimpinan','TIF3221307':'pemvis','TIF1221202':'eap','TIF3221303':'algoritma','TIF1221201':'agama'};
   const slug=slugs[materi.kode]||materi.kode.toLowerCase();
   const rows=materi.pertemuan.map(p=>`
     <div class="silabus-row">
@@ -359,7 +361,7 @@ function initMateriPortal(){
   if(typeof MATERI==='undefined'){grid.innerHTML='<p style="text-align:center;padding:48px;color:var(--ts)">Materi belum tersedia</p>';return}
   const KEY='ums_dafina_materi_v4';
   const progress=storage(KEY,{});
-  const slugs={'TIF3221308':'logika','TIF3221104':'praktikum','TIF3221305':'kalkulus','TIF3221206':'kepemimpinan','TIF3221307':'pemvis','TIF1221202':'eap'};
+  const slugs={'TIF3221308':'logika','TIF3221104':'praktikum','TIF3221305':'kalkulus','TIF3221206':'kepemimpinan','TIF3221307':'pemvis','TIF1221202':'eap','TIF3221303':'algoritma','TIF1221201':'agama'};
   grid.innerHTML=MATERI.map((m,i)=>{
     const prog=progress[m.kode]||{};
     const done=m.pertemuan.filter(p=>prog[p.no]).length;
@@ -399,6 +401,29 @@ function initMateriDetail(kode){
   const meta=document.getElementById('courseMeta');
   if(meta) meta.innerHTML=`<span>${ICONS.user} ${course.dosen}</span><span>${ICONS.cal} ${course.sks} SKS • Kelas ${course.kelas}</span>`;
   document.title=`${course.nama} — Materi Kuliah`;
+
+  // === RENDER RUTIN BANNER (ETP, dsb) ===
+  if(course.rutin){
+    const intro=document.querySelector('.page-intro');
+    if(intro && !document.getElementById('rutinBanner')){
+      intro.insertAdjacentHTML('beforeend', `
+        <div class="rutin-banner" id="rutinBanner">
+          <span class="rutin-badge">
+            <span class="dot"></span>
+            ${ICONS.clock} Program Rutin · Mingguan
+          </span>
+          <h3>${course.rutin.judul}</h3>
+          <p class="rutin-sub">${course.rutin.detail}</p>
+          <div class="rutin-meta">
+            <div class="rutin-meta-item">${ICONS.cal}<span><strong>Jadwal:</strong> ${course.rutin.jadwal}</span></div>
+            <div class="rutin-meta-item">${ICONS.clock}<span><strong>Mulai:</strong> ${course.rutin.mulai}</span></div>
+            <div class="rutin-meta-item">${ICONS.user}<span><strong>Tutor:</strong> ${course.rutin.tutor}</span></div>
+            <div class="rutin-meta-item">${ICONS.bookOpen}<span><strong>Dinilai:</strong> ${course.rutin.penilaian} (${course.rutin.bobot})</span></div>
+          </div>
+        </div>
+      `);
+    }
+  }
 
   const nav=document.getElementById('materiNav');
   const renderSidebar=()=>{
