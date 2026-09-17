@@ -1,3 +1,4 @@
+// ========== LINE 1-17 : initHeader ==========
 function initHeader(){
   const toggle=document.getElementById('menuToggle');
   const nav=document.getElementById('headerNav');
@@ -19,6 +20,8 @@ function initHeader(){
     },{passive:true});
   }
 }
+
+// ========== LINE 20-28 : initReveal ==========
 function initReveal(){
   const els=document.querySelectorAll('.reveal');
   if(!('IntersectionObserver' in window)){els.forEach(el=>el.classList.add('is-visible'));return}
@@ -28,6 +31,7 @@ function initReveal(){
   els.forEach(el=>io.observe(el));
 }
 
+// ========== LINE 30-68 : renderTodaySummary ==========
 function renderTodaySummary(){
   const el=document.getElementById('todaySummary'); if(!el) return;
   const now=new Date();
@@ -62,6 +66,8 @@ function renderTodaySummary(){
   }
   el.innerHTML=html;
 }
+
+// ========== LINE 70-79 : updateCountdown ==========
 function updateCountdown(){
   const el=document.getElementById('cdValue'); if(!el) return;
   const cd=formatCountdown(findNextClass());
@@ -71,6 +77,8 @@ function updateCountdown(){
     setTimeout(()=>el.classList.remove('cd-pop'),520);
   }
 }
+
+// ========== LINE 81-110 : renderSchedule ==========
 let currentDayKey='senin';
 function renderSchedule(dayKey){
   currentDayKey=dayKey;
@@ -100,6 +108,8 @@ function renderSchedule(dayKey){
     </div>`;
   }).join('');
 }
+
+// ========== LINE 112-122 : updateCurrentClassHighlight ==========
 function updateCurrentClassHighlight(){
   const todayKey=DAY_KEYS[new Date().getDay()];
   if(currentDayKey!==todayKey){document.querySelectorAll('.schedule-card.is-current').forEach(el=>el.classList.remove('is-current'));return}
@@ -110,6 +120,8 @@ function updateCurrentClassHighlight(){
     card.classList.toggle('is-current',nowMin>=timeToMinutes(r.start)&&nowMin<timeToMinutes(r.end));
   });
 }
+
+// ========== LINE 124-131 : renderWeekOverview ==========
 function renderWeekOverview(){
   const el=document.getElementById('weekOverview'); if(!el) return;
   el.innerHTML=['senin','selasa','rabu','kamis','jumat'].map(d=>{
@@ -117,6 +129,8 @@ function renderWeekOverview(){
     return `<div class="overview-card ${count===0?'empty':''}"><div class="day">${DAY_NAMES[d]}</div><div class="count">${count}</div><div class="count-label">${count===0?'Tidak ada kelas':'Kelas'}</div></div>`;
   }).join('');
 }
+
+// ========== LINE 133-142 : initTabs ==========
 function initTabs(){
   document.querySelectorAll('.day-tab').forEach(tab=>{
     tab.addEventListener('click',()=>{
@@ -127,6 +141,7 @@ function initTabs(){
   });
 }
 
+// ========== LINE 144-165 : initSilabus ==========
 function initSilabus(){
   const sidebar=document.getElementById('silabusSidebar'); if(!sidebar) return;
   if(typeof MATERI==='undefined'){sidebar.innerHTML='<div style="padding:24px;font-size:13px;color:var(--ts);text-align:center">Materi belum tersedia</div>';return;}
@@ -145,6 +160,8 @@ function initSilabus(){
   });
   if(withSilabus.length) renderSilabusMain(withSilabus[0].kode);
 }
+
+// ========== LINE 167-192 : renderSilabusMain ==========
 function renderSilabusMain(kode){
   const container=document.getElementById('silabusMain'); if(!container) return;
   if(typeof MATERI==='undefined') return;
@@ -172,6 +189,8 @@ function renderSilabusMain(kode){
       <div style="margin-top:16px;text-align:center"><a href="materi-${slug}.html" class="btn">${ICONS.bookOpen} Buka Materi Lengkap</a></div>
     </div>`;
 }
+
+// ========== LINE 194-234 : renderCourseList ==========
 function renderCourseList(){
   const container=document.getElementById('courseList'); if(!container) return;
   container.innerHTML=KRS.map(c=>{
@@ -208,6 +227,8 @@ function renderCourseList(){
     });
   });
 }
+
+// ========== LINE 236-268 : renderPetaStudi ==========
 function renderPetaStudi(){
   const tabs=document.getElementById('semesterTabs'); if(!tabs) return;
   const content=document.getElementById('semesterContent');
@@ -235,6 +256,7 @@ function renderPetaStudi(){
   });
 }
 
+// ========== LINE 270-291 : initTodos ==========
 function initTodos(){
   const input=document.getElementById('todoInput'); if(!input) return;
   const KEY='ums_dafina_todo_v4';
@@ -253,6 +275,8 @@ function initTodos(){
   input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();document.getElementById('todoAdd').click()}});
   render();
 }
+
+// ========== LINE 293-322 : initPomodoro ==========
 function initPomodoro(){
   const display=document.getElementById('pomoDisplay'); if(!display) return;
   let interval=null, remaining=25*60, running=false;
@@ -280,6 +304,8 @@ function initPomodoro(){
   });
   upd();
 }
+
+// ========== LINE 324-355 : initIPK ==========
 function initIPK(){
   const container=document.getElementById('ipkCourses'); if(!container) return;
   const KEY='ums_dafina_ipk_v4';
@@ -301,6 +327,8 @@ function initIPK(){
   }));
   compute();
 }
+
+// ========== LINE 357-368 : initNotes ==========
 function initNotes(){
   const ta=document.getElementById('notesArea'); if(!ta) return;
   const KEY='ums_dafina_notes_v4';
@@ -312,6 +340,8 @@ function initNotes(){
     timer=setTimeout(()=>{saveStorage(KEY,ta.value);st.textContent='Tersimpan '+new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})},500);
   });
 }
+
+// ========== LINE 370-402 : initICSExport ==========
 function initICSExport(){
   const btn=document.getElementById('exportICS'); if(!btn) return;
   btn.addEventListener('click',()=>{
@@ -338,6 +368,7 @@ function initICSExport(){
   });
 }
 
+// ========== LINE 404-419 : initDashboard ==========
 function initDashboard(){
   renderTodaySummary();
   renderSchedule('senin');
@@ -356,6 +387,7 @@ function initDashboard(){
   setInterval(renderTodaySummary,180000);
 }
 
+// ========== LINE 421-448 : initMateriPortal ==========
 function initMateriPortal(){
   const grid=document.getElementById('materiGrid'); if(!grid) return;
   if(typeof MATERI==='undefined'){grid.innerHTML='<p style="text-align:center;padding:48px;color:var(--ts)">Materi belum tersedia</p>';return}
@@ -387,6 +419,10 @@ function initMateriPortal(){
   }).join('');
 }
 
+// ============================================================
+// 🆕 LINE 450-585 : initMateriDetail (YANG BARU - MANUAL TOGGLE)
+// Ganti seluruh fungsi ini. Tidak ada auto-check lagi.
+// ============================================================
 function initMateriDetail(kode){
   if(typeof MATERI==='undefined'){document.querySelector('main').innerHTML='<div style="padding:48px;text-align:center"><p>Materi belum tersedia.</p><p style="margin-top:16px"><a href="materi.html" class="btn">Kembali</a></p></div>';return}
   const course=MATERI.find(m=>m.kode===kode);
@@ -402,7 +438,7 @@ function initMateriDetail(kode){
   if(meta) meta.innerHTML=`<span>${ICONS.user} ${course.dosen}</span><span>${ICONS.cal} ${course.sks} SKS • Kelas ${course.kelas}</span>`;
   document.title=`${course.nama} — Materi Kuliah`;
 
-  // === RENDER RUTIN BANNER (ETP, dsb) ===
+  // Banner rutin (ETP, dsb)
   if(course.rutin){
     const intro=document.querySelector('.page-intro');
     if(intro && !document.getElementById('rutinBanner')){
@@ -426,40 +462,58 @@ function initMateriDetail(kode){
   }
 
   const nav=document.getElementById('materiNav');
+
+  // 🆕 Render sidebar dengan toggle manual
   const renderSidebar=()=>{
     const prog=progress[course.kode]||{};
     nav.innerHTML='<div class="materi-nav-title">Daftar Pertemuan</div>'+
-      course.pertemuan.map(p=>`
-        <button class="pertemuan-item" data-no="${p.no}">
+      course.pertemuan.map(p=>{
+        const done=!!prog[p.no];
+        return `
+        <button class="pertemuan-item${done?' is-done':''}" data-no="${p.no}">
           <div class="pertemuan-item-num">${p.no}</div>
           <div class="pertemuan-item-body"><div class="pertemuan-item-title">${p.judul}</div></div>
-          ${prog[p.no]?'<span class="pertemuan-item-check">✓</span>':''}
-        </button>`).join('');
-    nav.querySelectorAll('.pertemuan-item').forEach(btn=>btn.addEventListener('click',()=>{
-      location.hash='pertemuan-'+btn.dataset.no;
-    }));
+          <span class="pertemuan-item-check${done?' checked':''}"
+                data-toggle="${p.no}"
+                role="checkbox"
+                aria-checked="${done}"
+                aria-label="Tandai pertemuan ${p.no} selesai"
+                title="Klik untuk tandai selesai/batal">${done?'✓':''}</span>
+        </button>`;
+      }).join('');
+
+    // Klik item → navigasi (kecuali klik centang)
+    nav.querySelectorAll('.pertemuan-item').forEach(btn=>{
+      btn.addEventListener('click',(e)=>{
+        if(e.target.closest('.pertemuan-item-check')) return;
+        location.hash='pertemuan-'+btn.dataset.no;
+      });
+    });
+
+    // 🆕 Klik centang → toggle manual
+    nav.querySelectorAll('.pertemuan-item-check').forEach(chk=>{
+      chk.addEventListener('click',(e)=>{
+        e.stopPropagation();
+        const no=+chk.dataset.toggle;
+        if(!progress[course.kode]) progress[course.kode]={};
+        progress[course.kode][no]=!progress[course.kode][no];
+        saveStorage(KEY,progress);
+        const isDone=!!progress[course.kode][no];
+        chk.classList.toggle('checked',isDone);
+        chk.textContent=isDone?'✓':'';
+        chk.setAttribute('aria-checked',isDone);
+        chk.closest('.pertemuan-item').classList.toggle('is-done',isDone);
+      });
+    });
   };
   renderSidebar();
 
+  // 🆕 Load konten pertemuan — TANPA auto-mark
   const loadPertemuan=(no)=>{
     const p=course.pertemuan.find(x=>x.no===no);
     if(!p){location.hash='pertemuan-'+course.pertemuan[0].no;return}
 
     nav.querySelectorAll('.pertemuan-item').forEach(el=>el.classList.toggle('active',+el.dataset.no===no));
-
-    if(!progress[course.kode]) progress[course.kode]={};
-    progress[course.kode][no]=true;
-    saveStorage(KEY,progress);
-
-    const prog=progress[course.kode]||{};
-    nav.querySelectorAll('.pertemuan-item').forEach(el=>{
-      const n=+el.dataset.no;
-      el.classList.toggle('active',n===no);
-      const hasCheck=el.querySelector('.pertemuan-item-check');
-      if(prog[n]&&!hasCheck){
-        el.insertAdjacentHTML('beforeend','<span class="pertemuan-item-check">✓</span>');
-      }
-    });
 
     const main=document.getElementById('pertemuanContent');
     const prev=course.pertemuan.find(x=>x.no===no-1);
@@ -506,6 +560,7 @@ function initMateriDetail(kode){
   if(openBtn) openBtn.href=course.link;
 }
 
+// ========== LINE 587-594 : INIT ==========
 document.addEventListener('DOMContentLoaded',()=>{
   initHeader();
   initReveal();
