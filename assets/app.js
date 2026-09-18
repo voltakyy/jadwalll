@@ -1,3 +1,15 @@
+// ================== POPUP HELPER ==================
+function initPopupSection(kode, container){
+  if(window.PopupCatatan){
+    window.PopupCatatan.init(kode, container);
+    return;
+  }
+  window.addEventListener('popup-ready', function once(){
+    window.removeEventListener('popup-ready', once);
+    if(window.PopupCatatan) window.PopupCatatan.init(kode, container);
+  });
+}
+
 // ================== HEADER ==================
 function initHeader(){
   const toggle=document.getElementById('menuToggle');
@@ -404,7 +416,7 @@ function initMateriPortal(){
   }).join('');
 }
 
-// ================== MK INFO PANEL (BARU) ==================
+// ================== MK INFO PANEL ==================
 function renderMKInfoPanel(course){
   if(!course.deskripsi && !course.capaian && !course.moda) return '';
 
@@ -485,7 +497,7 @@ function renderMKInfoPanel(course){
     </section>`;
 }
 
-// ================== MATERI DETAIL (BARU) ==================
+// ================== MATERI DETAIL ==================
 function initMateriDetail(kode){
   if(typeof MATERI==='undefined'){document.querySelector('main').innerHTML='<div style="padding:48px;text-align:center"><p>Materi belum tersedia.</p><p style="margin-top:16px"><a href="materi.html" class="btn">Kembali</a></p></div>';return}
   const course=MATERI.find(m=>m.kode===kode);
@@ -506,10 +518,16 @@ function initMateriDetail(kode){
   const layout=document.querySelector('.materi-detail-layout');
   if(!layout) return;
 
-  // Placeholder (Agama, dsb — tidak ada pertemuan)
+  // Placeholder (Agama, dsb)
   if(course.placeholder || !course.pertemuan || course.pertemuan.length===0){
     const infoPanel=renderMKInfoPanel(course);
     if(infoPanel) layout.insertAdjacentHTML('beforebegin', infoPanel);
+    // Pop-up section
+    const popupWrapper=document.createElement('div');
+    popupWrapper.className='popup-section';
+    layout.parentNode.insertBefore(popupWrapper, layout);
+    initPopupSection(course.kode, popupWrapper);
+    // Placeholder content
     layout.innerHTML=`
       <div style="grid-column:1/-1">
         <div class="pertemuan-main">
@@ -552,6 +570,12 @@ function initMateriDetail(kode){
   // Info Panel
   const infoPanel=renderMKInfoPanel(course);
   if(infoPanel) layout.insertAdjacentHTML('beforebegin', infoPanel);
+
+  // Pop-up Section
+  const popupWrapper=document.createElement('div');
+  popupWrapper.className='popup-section';
+  layout.parentNode.insertBefore(popupWrapper, layout);
+  initPopupSection(course.kode, popupWrapper);
 
   // Tabs
   const tabsHTML=`
