@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NAMA_MK — Materi</title>
+<script>document.documentElement.classList.add('js');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="materi-detail" data-mk="KODE_MK">
+
+<header class="header" id="siteHeader">
+  <div class="container header-inner">
+    <a href="index.html" class="header-brand">
+      <span class="header-brand-title">Materi Kuliah</span>
+      <span class="header-brand-sub" id="courseTitle">Memuat...</span>
+    </a>
+    <nav class="header-nav" id="headerNav">
+      <a href="index.html">Dashboard</a>
+      <a href="materi.html">Semua Materi</a>
+      <a href="#" class="active">Materi Ini</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Buka menu" aria-expanded="false">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="container">
+  <section class="page-intro" style="padding-top:32px;padding-bottom:8px">
+    <a href="materi.html" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--navy);margin-bottom:16px;text-decoration:none">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+      Kembali ke daftar materi
+    </a>
+    <div id="courseMeta"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px">
+      <a id="openDrive" href="#" target="_blank" rel="noopener" class="btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
+        Buka PDF di Drive
+      </a>
+      <a id="downloadPdf" href="#" target="_blank" rel="noopener" class="btn" style="background:var(--surface);color:var(--tp);border:1px solid var(--border)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+        Unduh PDF
+      </a>
+    </div>
+  </section>
+
+  <div class="materi-detail-layout" style="padding-bottom:64px">
+    <aside class="materi-nav" id="materiNav"></aside>
+    <div class="pertemuan-main" id="pertemuanContent"></div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <span class="footer-brand-title">Jadwal Kuliah</span>
+      <span class="footer-brand-sub">Semester Gasal 2026/2027</span>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-meta">
+      <div class="footer-meta-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Dafina Putri Hardiana — L200260179</span>
+      </div>
+      <span class="footer-tagline">Academic schedule dashboard • Kurikulum 2022</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/data.js"></script>
+<script type="module" src="assets/popup.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
