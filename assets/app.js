@@ -210,7 +210,7 @@ function renderCourseList(){
       <div class="course-acc-body"><div class="course-acc-inner">
         <div class="acc-block"><h5>Dosen Pengampu</h5><p>${c.dosen}</p></div>
         <div class="acc-block"><h5>Pengembang RPS</h5><div class="acc-rps-note"><strong>${c.pengembangRPS}</strong></div></div>
-        <div class="acc-block"><h5>Tentang</h5><p>${c.deskripsi}</p></div>
+        <div class="acc-block"><h5>Tentang</h5><p>${c.deskripsi}</p>${c.kodeNote?`<div class="kode-note">⚠️ ${c.kodeNote}</div>`:''}</div>
         <div class="acc-block"><h5>Capaian</h5><ul>${c.capaian.map(x=>`<li>${x}</li>`).join('')}</ul></div>
         <div class="acc-block"><h5>Referensi</h5><div class="acc-ref">${c.referensi.map(r=>`<div class="acc-ref-item"><span class="tag">${r.tag}</span><span>${r.text}</span></div>`).join('')}</div></div>
         ${c.bobot?`<div class="acc-block"><h5>Bobot</h5><div class="acc-tip">${c.bobot}</div></div>`:''}
