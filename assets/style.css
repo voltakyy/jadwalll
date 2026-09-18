@@ -846,6 +846,10 @@ a:hover{text-decoration:underline}
 .popup-btn-danger{background:var(--danger);color:#fff}
 .popup-btn-danger:hover{background:#932E3B}
 .popup-btn-save:disabled,.popup-btn-danger:disabled{opacity:.5;cursor:not-allowed}
+/* Fix SVG di #courseMeta (dan semua span tanpa class) */
+#courseMeta{display:flex;flex-wrap:wrap;gap:16px;font-size:13px;color:var(--ts);margin-top:12px}
+#courseMeta > span{display:inline-flex;align-items:center;gap:6px}
+#courseMeta svg{width:14px;height:14px;flex-shrink:0;stroke-width:1.8;color:var(--navy);display:inline-block}
 
 @media(prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}
