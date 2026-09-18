@@ -850,6 +850,10 @@ a:hover{text-decoration:underline}
 #courseMeta{display:flex;flex-wrap:wrap;gap:16px;font-size:13px;color:var(--ts);margin-top:12px}
 #courseMeta > span{display:inline-flex;align-items:center;gap:6px}
 #courseMeta svg{width:14px;height:14px;flex-shrink:0;stroke-width:1.8;color:var(--navy);display:inline-block}
+/* Safety net: SVG tanpa class jangan pernah raksasa */
+span > svg:not([class]), p > svg:not([class]), div > svg:not([class]){
+  width:14px;height:14px;display:inline-block;vertical-align:middle;
+}
 
 @media(prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}
