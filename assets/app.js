@@ -1,9 +1,82 @@
+// ================== ETP RENDER ==================
+function renderETPTab(course){
+  const etp = course.etp;
+  if(!etp) return '';
+  const totalSesi = etp.totalSesi || 14;
+  let sesiList = '';
+  for(let i=1; i<=totalSesi; i++){
+    sesiList += `
+      <div class="etp-sesi-item" data-sesi="${i}">
+        <button class="etp-sesi-head" type="button" aria-expanded="false">
+          <span class="etp-sesi-num">Sesi ${i}</span>
+          <span class="etp-sesi-title" data-title>Sesi ${i} — English Tutorial Program</span>
+          <span class="etp-sesi-chev">${ICONS.chev}</span>
+        </button>
+        <div class="etp-sesi-body">
+          <textarea class="etp-sesi-textarea" data-sesi="${i}" placeholder="Catatan untuk sesi ${i} ETP... (topik, tutor, materi, kesulitan, dll)"></textarea>
+        </div>
+      </div>`;
+  }
+  return `
+    <div class="mk-panel" data-panel="etp">
+      <div class="etp-wrap">
+        <div class="etp-hero">
+          <span class="etp-badge"><span class="dot"></span>${ICONS.clock} Program Rutin · Mingguan</span>
+          <h3>${etp.judul}</h3>
+          <p>${etp.detail}</p>
+          <div class="etp-meta-grid">
+            <div class="etp-meta-item"><div class="icon">${ICONS.cal}</div><div class="body"><div class="label">Jadwal</div><div class="value">${etp.jadwal}</div></div></div>
+            <div class="etp-meta-item"><div class="icon">${ICONS.clock}</div><div class="body"><div class="label">Mulai</div><div class="value">${etp.mulai}</div></div></div>
+            <div class="etp-meta-item"><div class="icon">${ICONS.user}</div><div class="body"><div class="label">Tutor</div><div class="value">${etp.tutor}</div></div></div>
+            <div class="etp-meta-item"><div class="icon">${ICONS.bookOpen}</div><div class="body"><div class="label">Penilaian</div><div class="value">${etp.penilaian} · ${etp.bobot}</div></div></div>
+          </div>
+        </div>
+        <div class="etp-sesi-card">
+          <h4>📝 Catatan Sesi ETP</h4>
+          <p class="sub">Klik sesi untuk membuka dan menulis catatan. Titik hijau (●) = sudah ada catatan.</p>
+          <div class="etp-sesi-list">${sesiList}</div>
+        </div>
+      </div>
+    </div>`;
+}
+function bindETPTab(course){
+  const container = document.querySelector('.mk-panel[data-panel="etp"]');
+  if(!container || !course.etp) return;
+  const NOTES_KEY = 'ums_dafina_catatan_v1';
+  const notes = storage(NOTES_KEY, {});
+  container.querySelectorAll('.etp-sesi-head').forEach(head=>{
+    head.addEventListener('click', ()=>{
+      const item = head.closest('.etp-sesi-item');
+      const isOpen = item.classList.toggle('open');
+      head.setAttribute('aria-expanded', isOpen);
+    });
+  });
+  container.querySelectorAll('.etp-sesi-textarea').forEach(ta=>{
+    const no = ta.dataset.sesi;
+    const key = course.kode + '_etp_' + no;
+    ta.value = notes[key] || '';
+    if(ta.value.trim().length > 0){
+      const title = ta.closest('.etp-sesi-item').querySelector('[data-title]');
+      if(title) title.classList.add('has-note');
+    }
+    let timer;
+    ta.addEventListener('input', ()=>{
+      clearTimeout(timer);
+      timer = setTimeout(()=>{
+        notes[key] = ta.value;
+        saveStorage(NOTES_KEY, notes);
+        const item = ta.closest('.etp-sesi-item');
+        const title = item.querySelector('[data-title]');
+        if(ta.value.trim().length > 0) title.classList.add('has-note');
+        else title.classList.remove('has-note');
+      }, 600);
+    });
+  });
+}
+
 // ================== POPUP HELPER ==================
 function initPopupSection(kode, container){
-  if(window.PopupCatatan){
-    window.PopupCatatan.init(kode, container);
-    return;
-  }
+  if(window.PopupCatatan){ window.PopupCatatan.init(kode, container); return; }
   window.addEventListener('popup-ready', function once(){
     window.removeEventListener('popup-ready', once);
     if(window.PopupCatatan) window.PopupCatatan.init(kode, container);
@@ -166,27 +239,14 @@ function renderSilabusMain(kode){
   const container=document.getElementById('silabusMain'); if(!container) return;
   if(typeof MATERI==='undefined') return;
   const materi=MATERI.find(m=>m.kode===kode);
-  if(!materi){
-    container.innerHTML='<div class="silabus-header"><h3>Belum tersedia</h3></div>';
-    return;
-  }
+  if(!materi){container.innerHTML='<div class="silabus-header"><h3>Belum tersedia</h3></div>';return;}
   const slugs={'TIF3221308':'logika','TIF3221104':'praktikum','TIF3221305':'kalkulus','TIF3221206':'kepemimpinan','TIF3221307':'pemvis','TIF1221202':'eap','TIF3221303':'algoritma','TIF1221201':'agama'};
   const slug=slugs[materi.kode]||materi.kode.toLowerCase();
   const rows=materi.pertemuan && materi.pertemuan.length
-    ? materi.pertemuan.map(p=>`
-      <div class="silabus-row">
-        <div class="silabus-row-head">
-          <span class="num">${p.no}</span>
-          <div class="content"><div class="materi-title">${p.judul}</div><div class="materi-desc">${p.desc||''}</div></div>
-        </div>
-      </div>`).join('')
+    ? materi.pertemuan.map(p=>`<div class="silabus-row"><div class="silabus-row-head"><span class="num">${p.no}</span><div class="content"><div class="materi-title">${p.judul}</div><div class="materi-desc">${p.desc||''}</div></div></div></div>`).join('')
     : '<div style="padding:32px;text-align:center;color:var(--ts);font-style:italic">Silabus belum tersedia</div>';
-
   container.innerHTML=`
-    <div class="silabus-header">
-      <h3>${materi.nama}</h3>
-      <div class="silabus-header-code">${materi.kode} • ${materi.sks} SKS • Kelas ${materi.kelas}</div>
-    </div>
+    <div class="silabus-header"><h3>${materi.nama}</h3><div class="silabus-header-code">${materi.kode} • ${materi.sks} SKS • Kelas ${materi.kelas}</div></div>
     <div class="silabus-body">
       ${materi.deskripsi?`<div style="font-size:13.5px;color:var(--tp);line-height:1.65;padding:var(--sp4);background:var(--bg);border-radius:var(--rb);margin-bottom:var(--sp5)">${materi.deskripsi}</div>`:''}
       <div class="silabus-table">${rows}</div>
@@ -194,7 +254,7 @@ function renderSilabusMain(kode){
     </div>`;
 }
 
-// ================== MATA KULIAH LIST ==================
+// ================== COURSE LIST ==================
 function renderCourseList(){
   const container=document.getElementById('courseList'); if(!container) return;
   container.innerHTML=KRS.map(c=>{
@@ -204,10 +264,7 @@ function renderCourseList(){
         <div class="course-acc-info">
           <div class="course-acc-name">${c.nama} ${badge}</div>
           <div class="course-acc-code">${c.kode} • ${c.sks} SKS</div>
-          <div class="course-acc-meta">
-            <span>${ICONS.cal} ${c.jadwal}</span>
-            ${!c.nonSched?`<span>${ICONS.mapPin} ${c.ruang}</span>`:''}
-          </div>
+          <div class="course-acc-meta"><span>${ICONS.cal} ${c.jadwal}</span>${!c.nonSched?`<span>${ICONS.mapPin} ${c.ruang}</span>`:''}</div>
         </div>
         <div class="course-acc-right"><div class="course-acc-badge">${c.kelas}</div><div class="course-acc-chevron">${ICONS.chev}</div></div>
       </button>
@@ -244,7 +301,7 @@ function renderPetaStudi(){
     content.innerHTML+=`<div class="sem-content ${i===1?'active':''}" data-sem="${i}">
       <div class="sem-info">${ICONS.cal} <strong>Total: ${d.total}</strong></div>
       <div class="sem-list">${d.items.map(item=>{
-        if(item.kode==='—') return `<div class="sem-item" style="background:var(--bg);border:none;padding:8px 16px"><span class="name" style="font-weight:700;color:var(--navy);font-size:12px;letter-spacing:.05em;text-transform:uppercase">${item.nama}</span></div>`;
+        if(item.kode==='-') return `<div class="sem-item" style="background:var(--bg);border:none;padding:8px 16px"><span class="name" style="font-weight:700;color:var(--navy);font-size:12px;letter-spacing:.05em;text-transform:uppercase">${item.nama}</span></div>`;
         const cls=item.highlight?'highlight':(item.consent?'consent':'');
         return `<div class="sem-item ${cls}"><span class="code">${item.kode}</span><span class="name">${item.nama}</span><span class="sks-badge">${item.sks} SKS</span></div>`;
       }).join('')}</div>
@@ -402,10 +459,7 @@ function initMateriPortal(){
       <div class="materi-card-body">
         <div class="materi-card-code">${m.kode}</div>
         <div class="materi-card-title">${m.nama}</div>
-        <div class="materi-card-meta">
-          <span>${ICONS.user} ${m.dosen.split(',')[0]}</span>
-          <span>${ICONS.bookOpen} ${placeholder?'Belum tersedia':total+' pertemuan'}</span>
-        </div>
+        <div class="materi-card-meta"><span>${ICONS.user} ${m.dosen.split(',')[0]}</span><span>${ICONS.bookOpen} ${placeholder?'Belum tersedia':total+' pertemuan'}</span></div>
       </div>
       <div class="materi-card-progress">
         <div class="materi-card-progress-bar"><div class="materi-card-progress-fill" style="width:${pct}%"></div></div>
@@ -419,82 +473,36 @@ function initMateriPortal(){
 // ================== MK INFO PANEL ==================
 function renderMKInfoPanel(course){
   if(!course.deskripsi && !course.capaian && !course.moda) return '';
-
   let capaianHtml='';
   if(course.capaian && Array.isArray(course.capaian) && course.capaian.length){
-    capaianHtml=`
-      <div class="capaian-section">
-        <h4>Capaian Pembelajaran</h4>
-        <div class="capaian-grid">
-          ${course.capaian.map((c,i)=>{
-            if(typeof c==='string'){
-              return `<div class="capaian-card"><div class="num">${String(i+1).padStart(2,'0')}</div><div class="body"><p>${c}</p></div></div>`;
-            }
-            return `<div class="capaian-card">
-              <div class="num">${String(i+1).padStart(2,'0')}</div>
-              <div class="body">
-                <h5>${c.judul}</h5>
-                <p>${c.desc}</p>
-              </div>
-            </div>`;
-          }).join('')}
-        </div>
-      </div>`;
+    capaianHtml=`<div class="capaian-section"><h4>Capaian Pembelajaran</h4><div class="capaian-grid">
+      ${course.capaian.map((c,i)=>{
+        if(typeof c==='string') return `<div class="capaian-card"><div class="num">${String(i+1).padStart(2,'0')}</div><div class="body"><p>${c}</p></div></div>`;
+        return `<div class="capaian-card"><div class="num">${String(i+1).padStart(2,'0')}</div><div class="body"><h5>${c.judul}</h5><p>${c.desc}</p></div></div>`;
+      }).join('')}
+    </div></div>`;
   }
-
   let factsHtml='';
   const facts=[];
   if(course.moda) facts.push({icon:ICONS.bookOpen, label:'Moda Pembelajaran', value:course.moda});
   if(course.kehadiran) facts.push({icon:ICONS.cal, label:'Kehadiran', value:course.kehadiran});
   if(course.prasyarat) facts.push({icon:ICONS.user, label:'Prasyarat', value:course.prasyarat});
   if(course.bobot) facts.push({icon:ICONS.bookOpen, label:'Ringkasan Bobot', value:course.bobot});
-
   if(course.bobotDetail){
-    facts.push({icon:ICONS.bookOpen, label:'Rincian Penilaian', value:'', custom:`
-      <div class="bobot-list">
-        ${course.bobotDetail.map(b=>`<div class="bobot-item${b.highlight?' highlight':''}"><span class="k">${b.komponen}</span><span class="v">${b.bobot}</span></div>`).join('')}
-      </div>`});
+    facts.push({icon:ICONS.bookOpen, label:'Rincian Penilaian', value:'', custom:`<div class="bobot-list">${course.bobotDetail.map(b=>`<div class="bobot-item${b.highlight?' highlight':''}"><span class="k">${b.komponen}</span><span class="v">${b.bobot}</span></div>`).join('')}</div>`});
   }
-
   if(course.skalaNilai){
-    facts.push({icon:ICONS.bookOpen, label:'Skala Nilai', value:'', custom:`
-      <div class="skala-mini">
-        ${course.skalaNilai.map(s=>`<div class="skala-mini-item ${s.kategori}"><span class="g">${s.grade}</span><span class="r">${s.range}</span></div>`).join('')}
-      </div>`});
+    facts.push({icon:ICONS.bookOpen, label:'Skala Nilai', value:'', custom:`<div class="skala-mini">${course.skalaNilai.map(s=>`<div class="skala-mini-item ${s.kategori}"><span class="g">${s.grade}</span><span class="r">${s.range}</span></div>`).join('')}</div>`});
   }
-
   if(facts.length){
-    factsHtml=`
-      <div class="mk-facts">
-        <h4>Info Mata Kuliah</h4>
-        ${facts.map(f=>`
-          <div class="fact-row">
-            <div class="icon">${f.icon}</div>
-            <div class="body">
-              <div class="label">${f.label}</div>
-              ${f.custom ? f.custom : `<div class="value">${f.value}</div>`}
-            </div>
-          </div>`).join('')}
-      </div>`;
+    factsHtml=`<div class="mk-facts"><h4>Info Mata Kuliah</h4>${facts.map(f=>`<div class="fact-row"><div class="icon">${f.icon}</div><div class="body"><div class="label">${f.label}</div>${f.custom?f.custom:`<div class="value">${f.value}</div>`}</div></div>`).join('')}</div>`;
   }
-
   if(!capaianHtml && !factsHtml) return '';
-
-  return `
-    <section class="mk-info-section">
-      <div class="mk-info-header">
-        <div class="mk-info-header-icon">📖</div>
-        <div class="mk-info-header-text">
-          <h3>${course.nama}</h3>
-          <p>Gambaran Mata Kuliah & Capaian</p>
-        </div>
-      </div>
-      ${course.deskripsi?`<p style="font-size:14px;color:var(--tp);line-height:1.7;margin-bottom:var(--sp5);padding-bottom:var(--sp5);border-bottom:1px dashed var(--border)">${course.deskripsi}</p>`:''}
-      <div class="mk-info-grid">
-        ${capaianHtml}
-        ${factsHtml}
-      </div>
-    </section>`;
+  return `<section class="mk-info-section">
+    <div class="mk-info-header"><div class="mk-info-header-icon">📖</div><div class="mk-info-header-text"><h3>${course.nama}</h3><p>Gambaran Mata Kuliah & Capaian</p></div></div>
+    ${course.deskripsi?`<p style="font-size:14px;color:var(--tp);line-height:1.7;margin-bottom:var(--sp5);padding-bottom:var(--sp5);border-bottom:1px dashed var(--border)">${course.deskripsi}</p>`:''}
+    <div class="mk-info-grid">${capaianHtml}${factsHtml}</div>
+  </section>`;
 }
 
 // ================== MATERI DETAIL ==================
@@ -518,53 +526,19 @@ function initMateriDetail(kode){
   const layout=document.querySelector('.materi-detail-layout');
   if(!layout) return;
 
-  // Placeholder (Agama, dsb)
+  // Placeholder
   if(course.placeholder || !course.pertemuan || course.pertemuan.length===0){
     const infoPanel=renderMKInfoPanel(course);
     if(infoPanel) layout.insertAdjacentHTML('beforebegin', infoPanel);
-    // Pop-up section
     const popupWrapper=document.createElement('div');
     popupWrapper.className='popup-section';
     layout.parentNode.insertBefore(popupWrapper, layout);
     initPopupSection(course.kode, popupWrapper);
-    // Placeholder content
-    layout.innerHTML=`
-      <div style="grid-column:1/-1">
-        <div class="pertemuan-main">
-          <div class="pertemuan-header">
-            <span class="pertemuan-num">Silabus Belum Tersedia</span>
-            <h1>${course.nama}</h1>
-            <p class="pertemuan-desc">Silabus dan daftar pertemuan belum dirilis oleh dosen pengampu.</p>
-          </div>
-          <div class="pertemuan-body">
-            <div class="empty-content" style="padding:64px 24px;text-align:center">
-              <p style="font-size:18px;color:var(--tp);font-weight:600;margin-bottom:12px">📭 Silabus resmi belum dirilis</p>
-              <p>Halaman ini akan otomatis terisi setelah silabus resmi tersedia.</p>
-            </div>
-          </div>
-        </div>
-      </div>`;
+    layout.innerHTML=`<div style="grid-column:1/-1"><div class="pertemuan-main">
+      <div class="pertemuan-header"><span class="pertemuan-num">Silabus Belum Tersedia</span><h1>${course.nama}</h1><p class="pertemuan-desc">Silabus dan daftar pertemuan belum dirilis oleh dosen pengampu.</p></div>
+      <div class="pertemuan-body"><div class="empty-content" style="padding:64px 24px;text-align:center"><p style="font-size:18px;color:var(--tp);font-weight:600;margin-bottom:12px">📭 Silabus resmi belum dirilis</p><p>Halaman ini akan otomatis terisi setelah silabus resmi tersedia.</p></div></div>
+    </div></div>`;
     return;
-  }
-
-  // Rutin banner (ETP, dsb)
-  if(course.rutin){
-    const intro=document.querySelector('.page-intro');
-    if(intro && !document.getElementById('rutinBanner')){
-      intro.insertAdjacentHTML('beforeend', `
-        <div class="rutin-banner" id="rutinBanner">
-          <span class="rutin-badge"><span class="dot"></span>${ICONS.clock} Program Rutin · Mingguan</span>
-          <h3>${course.rutin.judul}</h3>
-          <p class="rutin-sub">${course.rutin.detail}</p>
-          <div class="rutin-meta">
-            <div class="rutin-meta-item">${ICONS.cal}<span><strong>Jadwal:</strong> ${course.rutin.jadwal}</span></div>
-            <div class="rutin-meta-item">${ICONS.clock}<span><strong>Mulai:</strong> ${course.rutin.mulai}</span></div>
-            <div class="rutin-meta-item">${ICONS.user}<span><strong>Tutor:</strong> ${course.rutin.tutor}</span></div>
-            <div class="rutin-meta-item">${ICONS.bookOpen}<span><strong>Dinilai:</strong> ${course.rutin.penilaian} (${course.rutin.bobot})</span></div>
-          </div>
-        </div>
-      `);
-    }
   }
 
   // Info Panel
@@ -578,33 +552,30 @@ function initMateriDetail(kode){
   initPopupSection(course.kode, popupWrapper);
 
   // Tabs
-  const tabsHTML=`
-    <div class="mk-tabs" role="tablist">
-      <button class="mk-tab active" data-tab="materi" role="tab" aria-selected="true">📖 Materi</button>
-      <button class="mk-tab" data-tab="catatan" role="tab" aria-selected="false">📔 Catatan</button>
-    </div>`;
+  const hasETP = !!course.etp;
+  const tabsHTML=`<div class="mk-tabs" role="tablist">
+    <button class="mk-tab active" data-tab="materi" role="tab" aria-selected="true">📖 Pertemuan Kelas</button>
+    ${hasETP?`<button class="mk-tab" data-tab="etp" role="tab" aria-selected="false">🎤 ETP Program</button>`:''}
+    <button class="mk-tab" data-tab="catatan" role="tab" aria-selected="false">📔 Catatan</button>
+  </div>`;
   layout.insertAdjacentHTML('beforebegin', tabsHTML);
   layout.classList.add('mk-panel','active');
   layout.setAttribute('data-panel','materi');
 
+  // ETP panel
+  if(hasETP){
+    const etpHTML = renderETPTab(course);
+    layout.insertAdjacentHTML('afterend', etpHTML);
+  }
+
   // Catatan panel
-  const catatanHTML=`
-    <div class="mk-panel" data-panel="catatan">
-      <div class="catatan-wrap">
-        <div class="catatan-card">
-          <h3>📝 Catatan Umum — ${course.nama}</h3>
-          <p class="catatan-sub">Catatan bebas untuk seluruh mata kuliah ini. Tersimpan otomatis di browser.</p>
-          <textarea class="catatan-textarea" id="catatanUmum" placeholder="Tulis catatan umum, tips dosen, atau hal penting dari mata kuliah ini..."></textarea>
-          <div class="catatan-status" id="catatanUmumStatus">Tersimpan otomatis</div>
-        </div>
-        <div class="catatan-card">
-          <h3>📔 Catatan per Pertemuan</h3>
-          <p class="catatan-sub">Klik pertemuan untuk membuka dan menulis catatan. Titik hijau (●) = sudah ada catatan.</p>
-          <div class="catatan-pertemuan-list" id="catatanPertemuanList"></div>
-        </div>
-      </div>
-    </div>`;
+  const catatanHTML=`<div class="mk-panel" data-panel="catatan"><div class="catatan-wrap">
+    <div class="catatan-card"><h3>📝 Catatan Umum — ${course.nama}</h3><p class="catatan-sub">Catatan bebas untuk seluruh mata kuliah ini. Tersimpan otomatis di browser.</p><textarea class="catatan-textarea" id="catatanUmum" placeholder="Tulis catatan umum, tips dosen, atau hal penting dari mata kuliah ini..."></textarea><div class="catatan-status" id="catatanUmumStatus">Tersimpan otomatis</div></div>
+    <div class="catatan-card"><h3>📔 Catatan per Pertemuan</h3><p class="catatan-sub">Klik pertemuan untuk membuka dan menulis catatan. Titik hijau (●) = sudah ada catatan.</p><div class="catatan-pertemuan-list" id="catatanPertemuanList"></div></div>
+  </div></div>`;
   layout.insertAdjacentHTML('afterend', catatanHTML);
+
+  if(hasETP) bindETPTab(course);
 
   // Tab switching
   document.querySelectorAll('.mk-tab').forEach(tab=>{
@@ -624,21 +595,18 @@ function initMateriDetail(kode){
     nav.innerHTML='<div class="materi-nav-title">Daftar Pertemuan</div>'+
       course.pertemuan.map(p=>{
         const done=!!prog[p.no];
-        return `
-        <button class="pertemuan-item${done?' is-done':''}" data-no="${p.no}">
+        return `<button class="pertemuan-item${done?' is-done':''}" data-no="${p.no}">
           <div class="pertemuan-item-num">${p.no}</div>
           <div class="pertemuan-item-body"><div class="pertemuan-item-title">${p.judul}</div></div>
           <span class="pertemuan-item-check${done?' checked':''}" data-toggle="${p.no}" role="checkbox" aria-checked="${done}" title="Tandai selesai/batal">${done?'✓':''}</span>
         </button>`;
       }).join('');
-
     nav.querySelectorAll('.pertemuan-item').forEach(btn=>{
       btn.addEventListener('click',(e)=>{
         if(e.target.closest('.pertemuan-item-check')) return;
         location.hash='pertemuan-'+btn.dataset.no;
       });
     });
-
     nav.querySelectorAll('.pertemuan-item-check').forEach(chk=>{
       chk.addEventListener('click',(e)=>{
         e.stopPropagation();
@@ -656,43 +624,22 @@ function initMateriDetail(kode){
   };
   renderSidebar();
 
-  // Load pertemuan
   const loadPertemuan=(no)=>{
     const p=course.pertemuan.find(x=>x.no===no);
     if(!p){location.hash='pertemuan-'+course.pertemuan[0].no;return}
     nav.querySelectorAll('.pertemuan-item').forEach(el=>el.classList.toggle('active',+el.dataset.no===no));
-
     const main=document.getElementById('pertemuanContent');
     const prev=course.pertemuan.find(x=>x.no===no-1);
     const next=course.pertemuan.find(x=>x.no===no+1);
     const hasDetail=!!p.detail;
-
-    main.innerHTML=`
-      <div class="pertemuan-header">
-        <span class="pertemuan-num">Pertemuan ${p.no}</span>
-        <h1>${p.judul}</h1>
-        <p class="pertemuan-desc">${p.desc||''}</p>
-      </div>
-      ${hasDetail?`<div class="pertemuan-body">${p.detail}</div>`:`
-        <div class="pertemuan-body">
-          <div class="empty-content">
-            <p style="font-size:16px;color:var(--tp);font-weight:600;margin-bottom:8px">Materi lengkap belum diunggah</p>
-            <p>Untuk sementara, baca materi ini langsung dari PDF asli di Google Drive.</p>
-            <a href="${course.link}" target="_blank" rel="noopener" class="btn" style="margin-top:16px;display:inline-flex">${ICONS.extLink} Buka PDF di Drive</a>
-          </div>
-        </div>
-      `}
+    main.innerHTML=`<div class="pertemuan-header"><span class="pertemuan-num">Pertemuan ${p.no}</span><h1>${p.judul}</h1><p class="pertemuan-desc">${p.desc||''}</p></div>
+      ${hasDetail?`<div class="pertemuan-body">${p.detail}</div>`:`<div class="pertemuan-body"><div class="empty-content"><p style="font-size:16px;color:var(--tp);font-weight:600;margin-bottom:8px">Materi lengkap belum diunggah</p><p>Untuk sementara, baca materi ini langsung dari PDF asli di Google Drive.</p><a href="${course.link}" target="_blank" rel="noopener" class="btn" style="margin-top:16px;display:inline-flex">${ICONS.extLink} Buka PDF di Drive</a></div></div>`}
       <div class="pertemuan-nav">
-        <a class="pertemuan-nav-btn" href="${prev?'#pertemuan-'+prev.no:'#'}" ${!prev?'style="opacity:.4;pointer-events:none"':''}>
-          ${ICONS.arrowL}<span><span class="label">Sebelumnya</span>${prev?'Pertemuan '+prev.no:'—'}</span>
-        </a>
-        <a class="pertemuan-nav-btn next" href="${next?'#pertemuan-'+next.no:'#'}" ${!next?'style="opacity:.4;pointer-events:none"':''}>
-          <span><span class="label">Selanjutnya</span>${next?'Pertemuan '+next.no:'—'}</span>${ICONS.arrowR}
-        </a>
+        <a class="pertemuan-nav-btn" href="${prev?'#pertemuan-'+prev.no:'#'}" ${!prev?'style="opacity:.4;pointer-events:none"':''}>${ICONS.arrowL}<span><span class="label">Sebelumnya</span>${prev?'Pertemuan '+prev.no:'—'}</span></a>
+        <a class="pertemuan-nav-btn next" href="${next?'#pertemuan-'+next.no:'#'}" ${!next?'style="opacity:.4;pointer-events:none"':''}><span><span class="label">Selanjutnya</span>${next?'Pertemuan '+next.no:'—'}</span>${ICONS.arrowR}</a>
       </div>`;
     window.scrollTo({top:0,behavior:'smooth'});
   };
-
   const handleHash=()=>{
     const h=location.hash.replace('#pertemuan-','');
     const no=parseInt(h)||course.pertemuan[0].no;
@@ -709,15 +656,12 @@ function initMateriDetail(kode){
     const status=document.getElementById('catatanUmumStatus');
     let timer;
     catatanUmum.addEventListener('input',()=>{
-      status.textContent='Mengetik...';
-      status.classList.remove('saved');
+      status.textContent='Mengetik...'; status.classList.remove('saved');
       clearTimeout(timer);
       timer=setTimeout(()=>{
-        notes[key]=catatanUmum.value;
-        saveStorage(NOTES_KEY,notes);
+        notes[key]=catatanUmum.value; saveStorage(NOTES_KEY,notes);
         const t=new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
-        status.textContent='Tersimpan '+t;
-        status.classList.add('saved');
+        status.textContent='Tersimpan '+t; status.classList.add('saved');
       },600);
     });
   }
@@ -729,19 +673,15 @@ function initMateriDetail(kode){
       const key=course.kode+'_'+p.no;
       const val=notes[key]||'';
       const hasNote=val.trim().length>0;
-      return `
-      <div class="catatan-pertemuan-item" data-no="${p.no}">
+      return `<div class="catatan-pertemuan-item" data-no="${p.no}">
         <button class="catatan-pertemuan-head" type="button" aria-expanded="false">
           <span class="catatan-pertemuan-num">${p.no}</span>
           <span class="catatan-pertemuan-title${hasNote?' has-note':''}">${p.judul}</span>
           <span class="catatan-pertemuan-chev">${ICONS.chev}</span>
         </button>
-        <div class="catatan-pertemuan-body">
-          <textarea class="catatan-pertemuan-textarea" data-no="${p.no}" placeholder="Catatan untuk pertemuan ${p.no}...">${esc(val)}</textarea>
-        </div>
+        <div class="catatan-pertemuan-body"><textarea class="catatan-pertemuan-textarea" data-no="${p.no}" placeholder="Catatan untuk pertemuan ${p.no}...">${esc(val)}</textarea></div>
       </div>`;
     }).join('');
-
     list.querySelectorAll('.catatan-pertemuan-head').forEach(head=>{
       head.addEventListener('click',()=>{
         const item=head.closest('.catatan-pertemuan-item');
@@ -749,7 +689,6 @@ function initMateriDetail(kode){
         head.setAttribute('aria-expanded',isOpen);
       });
     });
-
     list.querySelectorAll('.catatan-pertemuan-textarea').forEach(ta=>{
       const no=ta.dataset.no;
       const key=course.kode+'_'+no;
@@ -757,8 +696,7 @@ function initMateriDetail(kode){
       ta.addEventListener('input',()=>{
         clearTimeout(timer);
         timer=setTimeout(()=>{
-          notes[key]=ta.value;
-          saveStorage(NOTES_KEY,notes);
+          notes[key]=ta.value; saveStorage(NOTES_KEY,notes);
           const item=ta.closest('.catatan-pertemuan-item');
           const title=item.querySelector('.catatan-pertemuan-title');
           if(ta.value.trim().length>0) title.classList.add('has-note');
