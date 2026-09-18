@@ -437,6 +437,26 @@ function initMateriDetail(kode){
   const meta=document.getElementById('courseMeta');
   if(meta) meta.innerHTML=`<span>${ICONS.user} ${course.dosen}</span><span>${ICONS.cal} ${course.sks} SKS • Kelas ${course.kelas}</span>`;
   document.title=`${course.nama} — Materi Kuliah`;
+    // Handle placeholder (Agama)
+  if(course.placeholder || !course.pertemuan || course.pertemuan.length===0){
+    const nav=document.getElementById('materiNav');
+    if(nav) nav.innerHTML='<div class="materi-nav-title">Daftar Pertemuan</div><div style="padding:16px;font-size:13px;color:var(--ts);text-align:center;font-style:italic">Belum ada data</div>';
+    const main=document.getElementById('pertemuanContent');
+    if(main) main.innerHTML=`
+      <div class="pertemuan-header">
+        <span class="pertemuan-num">Silabus Belum Tersedia</span>
+        <h1>${course.nama}</h1>
+        <p class="pertemuan-desc">${course.deskripsi||''}</p>
+      </div>
+      <div class="pertemuan-body">
+        <div class="empty-content" style="padding:64px 24px">
+          <p style="font-size:18px;color:var(--tp);font-weight:600;margin-bottom:12px">📭 Silabus resmi belum dirilis</p>
+          <p>Dosen pengampu belum membagikan silabus atau daftar pertemuan untuk mata kuliah ini.</p>
+          <p style="margin-top:16px;font-size:13px">Halaman ini akan otomatis terisi setelah silabus resmi tersedia.</p>
+        </div>
+      </div>`;
+    return;
+  }
 
   // Banner rutin (ETP, dsb)
   if(course.rutin){
