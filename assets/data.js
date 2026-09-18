@@ -52,10 +52,15 @@ const KRS = [
     referensi:[{tag:"Utama",text:"RPS Kepemimpinan - Nurgiyatna, UMS"}],
     tips:"Manfaatkan diskusi untuk melatih public speaking.", bobot:"Tiap topik 6-10%, UTS, UAS 10%"},
   {kode:"TIF3221308", nama:"Logika dan Himpunan", kelas:"C", sks:3, jadwal:"Senin 12.30-15.00", ruang:"G0301", dosen:"Reinal Ariyuda, B.Eng., M.Eng.", pengembangRPS:"Dr.Eng. Yusuf Sulistyo Nugroho, S.T., M.Eng",
-    deskripsi:"Mata kuliah dasar logika matematika dan himpunan untuk ilmu komputer.",
-    capaian:["Menjelaskan teori informatika","Mengidentifikasi masalah aplikasi","Menjabarkan metode algoritma"],
-    referensi:[{tag:"Utama",text:"Soesianto & Dwijono. (2010). Logika Matematika untuk Ilmu Komputer. Andi."}],
-    tips:"Kuasai tablo semantik, CNF, dan DNF.", bobot:"UTS 25%, UAS 25%, Tugas 50%"},
+    deskripsi:"Di akhir pembelajaran MK Logika dan Himpunan, mahasiswa diharapkan mampu menjelaskan dan menerapkan dasar-dasar logika, tabel kebenaran, proposisi majemuk, tautologi, ekuivalensi logis, bentuk normal, pembuktian logika, dan analisis validitas argumen, serta menjelaskan istilah dan simbol himpunan, menerapkan diagram Venn, relasi himpunan, operasi himpunan, dan relasi. Mata kuliah ini diselenggarakan setiap pekan sesuai jadwal kelas masing-masing.",
+    capaian:[
+      "Menerapkan teknik penyederhanaan, strategi pembalikan, tablo semantik, bentuk normal, dan resolusi untuk memverifikasi konsistensi serta validitas argumen logis, sehingga dapat digunakan sebagai dasar pengembangan algoritma dan sistem cerdas pada teknologi multi-platform.",
+      "Menjelaskan konsep dasar himpunan, menggambarkan representasi menggunakan diagram Venn, serta menerapkan relasi dan operasi himpunan untuk memodelkan dan menyelesaikan permasalahan yang berkaitan dengan pengelolaan data pada aplikasi teknologi multi-platform.",
+      "Menjelaskan konsep dasar logika matematika dan logika proposisional, termasuk argumen, validitas, proposisi, serta pemberian nilai kebenaran, untuk mendukung analisis dan perancangan solusi pada aplikasi teknologi multi-platform.",
+      "Menyusun dan menganalisis tabel kebenaran, proposisi majemuk, tautologi, serta ekuivalensi logis untuk mengevaluasi validitas argumen dan menyederhanakan ekspresi logika, sebagai dasar dalam perancangan algoritma dan implementasi teknologi multi-platform."
+    ],
+    referensi:[{tag:"Utama",text:"Soesianto & Dwijono. (2010). Logika Matematika untuk Ilmu Komputer. Andi."},{tag:"Pendukung",text:"Jong Jek Siang. (2015). Logika Matematika: Soal dan Penyelesaian. Andi."}],
+    tips:"Kuasai tablo semantik, CNF, dan DNF.", bobot:"Presensi 10% • Tugas & Kuis 40% • UTS 25% • UAS 25%"},
   {kode:"TIF3221307", nama:"Pemrograman Visual", kelas:"C", sks:3, jadwal:"Kamis 12.30-15.00", ruang:"G0304", dosen:"Faris Atoll Haq, S.Tr.T., M.Kom.", pengembangRPS:"Maryam, S.Kom., M.Eng.",
     deskripsi:"Pemrograman berbasis obyek menggunakan blok kode visual (Alice & Greenfoot).",
     capaian:["Menganalisis dan mendesain solusi proyek","Menyusun model analisis dan desain"],
@@ -156,6 +161,12 @@ function formatCountdown(info){
 const MATERI = [
   {kode:"TIF1221201", nama:"Agama", dosen:"Tim Pengampu UMS", sks:2, kelas:"A", placeholder:true,
     driveId:"", link:"#",
+    deskripsi:"Mata kuliah pengembangan kepribadian yang membentuk karakter religius, etika, dan moral mahasiswa. Silabus resmi akan diumumkan oleh dosen pengampu.",
+    capaian:[
+      {judul:"Nilai Keagamaan", desc:"Memahami dan menginternalisasi nilai-nilai keagamaan dalam kehidupan sehari-hari."},
+      {judul:"Akhlak Mulia", desc:"Membentuk akhlak mulia sebagai landasan karakter profesional."},
+      {judul:"Isu Kontemporer", desc:"Menganalisis isu kontemporer dari perspektif agama."}
+    ],
     pertemuan:[]
   },
   {kode:"TIF3221303", nama:"Algoritma dan Pemrograman", dosen:"Muhammad Syahriandi Adhantoro., S.Kom, M.Kom.", sks:3, kelas:"C",
@@ -236,8 +247,91 @@ const MATERI = [
   },
   {kode:"TIF3221308", nama:"Logika dan Himpunan", dosen:"Reinal Ariyuda, B.Eng., M.Eng.", sks:3, kelas:"C",
     driveId:"1PA2EuAmK1yo7AD-EQxved5ALjk9pJEz-", link:"https://drive.google.com/file/d/1PA2EuAmK1yo7AD-EQxved5ALjk9pJEz-/view?usp=drivesdk",
+    deskripsi:"Di akhir pembelajaran MK Logika dan Himpunan, mahasiswa diharapkan mampu menjelaskan dan menerapkan dasar-dasar logika, tabel kebenaran, proposisi majemuk, tautologi, ekuivalensi logis, bentuk normal, pembuktian logika, dan analisis validitas argumen, serta menjelaskan istilah dan simbol himpunan, menerapkan diagram Venn, relasi himpunan, operasi himpunan, dan relasi.",
+    capaian:[
+      {judul:"Teknik Verifikasi Logika", desc:"Menerapkan teknik penyederhanaan, strategi pembalikan, tablo semantik, bentuk normal, dan resolusi untuk memverifikasi konsistensi serta validitas argumen logis — sebagai dasar pengembangan algoritma dan sistem cerdas pada teknologi multi-platform."},
+      {judul:"Konsep Himpunan & Diagram Venn", desc:"Menjelaskan konsep dasar himpunan, menggambarkan representasi menggunakan diagram Venn, serta menerapkan relasi dan operasi himpunan untuk memodelkan dan menyelesaikan permasalahan pengelolaan data."},
+      {judul:"Logika Matematika & Proposisional", desc:"Menjelaskan konsep dasar logika matematika dan logika proposisional, termasuk argumen, validitas, proposisi, serta pemberian nilai kebenaran untuk mendukung analisis dan perancangan solusi."},
+      {judul:"Tabel Kebenaran & Analisis Validitas", desc:"Menyusun dan menganalisis tabel kebenaran, proposisi majemuk, tautologi, serta ekuivalensi logis untuk mengevaluasi validitas argumen dan menyederhanakan ekspresi logika."}
+    ],
+    moda:"Offline 75% · Online 25% (Zoom / Google Meet). LMS: Spada UMS",
+    kehadiran:"Minimal 75% — maksimal 4x tidak hadir. Toleransi keterlambatan 10 menit.",
+    prasyarat:"Tidak ada",
+    bobotDetail:[
+      {komponen:"Presensi", bobot:"10%"},
+      {komponen:"Tugas-tugas & Kuis", bobot:"40%", highlight:true},
+      {komponen:"UTS", bobot:"25%"},
+      {komponen:"UAS", bobot:"25%"}
+    ],
+    skalaNilai:[
+      {grade:"A", range:"≥ 80", kategori:"a"},
+      {grade:"AB", range:"70-79", kategori:"a"},
+      {grade:"B", range:"65-69", kategori:"b"},
+      {grade:"BC", range:"60-64", kategori:"b"},
+      {grade:"C", range:"50-59", kategori:"c"},
+      {grade:"D", range:"35-49", kategori:"d"},
+      {grade:"E", range:"< 35", kategori:"e"}
+    ],
     pertemuan:[
-      {no:1, judul:"Pengenalan Logika Matematika", desc:"Pendahuluan logika, argumen, validitas, logika klasik, logika modern, dan logika banyak nilai."},
+      {no:1, judul:"Pengenalan Logika Matematika", desc:"Pendahuluan logika, argumen, validitas, logika klasik, logika modern, dan logika banyak nilai.",
+        detail:`
+          <div class="detail-note warm"><strong>Pertemuan 1</strong> · Logika dan Himpunan · Dosen: Reinal Ariyuda · Senin, 14 September 2026</div>
+          <div class="detail-section"><h6>📋 Moda & Mekanisme Belajar</h6>
+            <p><strong>Offline 75%</strong> · <strong>Online 25%</strong> (via Zoom / Google Meet). LMS resmi: <strong>Spada UMS</strong>.</p>
+            <ul><li>Kehadiran minimal 75% — maksimal 4x tidak hadir</li><li>Toleransi keterlambatan: 10 menit</li></ul></div>
+          <div class="detail-section"><h6>📊 Evaluasi Perkuliahan</h6>
+            <div class="eval-table">
+              <div class="eval-row"><span class="komponen">Presensi</span><span class="bobot">10%</span></div>
+              <div class="eval-row highlight"><span class="komponen">Tugas-tugas & Kuis</span><span class="bobot">40%</span></div>
+              <div class="eval-row"><span class="komponen">UTS</span><span class="bobot">25%</span></div>
+              <div class="eval-row"><span class="komponen">UAS</span><span class="bobot">25%</span></div>
+            </div>
+            <h6 style="margin-top:16px">Skala Nilai</h6>
+            <div class="skala-grid">
+              <div class="skala-item a"><span class="grade">A</span><span class="range">≥ 80</span></div>
+              <div class="skala-item a"><span class="grade">AB</span><span class="range">70-79</span></div>
+              <div class="skala-item b"><span class="grade">B</span><span class="range">65-69</span></div>
+              <div class="skala-item b"><span class="grade">BC</span><span class="range">60-64</span></div>
+              <div class="skala-item c"><span class="grade">C</span><span class="range">50-59</span></div>
+              <div class="skala-item d"><span class="grade">D</span><span class="range">35-49</span></div>
+              <div class="skala-item e"><span class="grade">E</span><span class="range">&lt; 35</span></div>
+            </div></div>
+          <div class="detail-section"><h6>1. Apa itu Logika?</h6>
+            <p>Logika (<em>logic</em>) berasal dari kata Yunani <strong>"logos"</strong>. Ilmu tentang metode penalaran yang berhubungan dengan pembuktian validitas suatu argumen.</p>
+            <p><strong>Pernyataan</strong> adalah kalimat yang memiliki arti dan dapat bernilai <strong>benar</strong> atau <strong>salah</strong>.</p>
+            <div class="detail-example"><span class="label">Contoh</span><p>✅ Ibukota negara Indonesia adalah Jakarta.</p><p>✅ Presiden Indonesia adalah Mulyo Notonegoro.</p></div></div>
+          <div class="detail-section"><h6>2. Penalaran Deduktif</h6>
+            <p>Logika berhubungan dengan <strong>penalaran deduktif</strong> — mengambil <strong>kesimpulan (K)</strong> dari <strong>premis (P)</strong>.</p>
+            <div class="detail-example"><span class="label">Contoh</span><p>P1: Semua yang pergi kuliah memakai baju.</p><p>P2: Joko pergi kuliah.</p><p><strong>K: Joko memakai baju.</strong></p></div></div>
+          <div class="detail-section"><h6>3. Peranan Logika</h6>
+            <ul><li><strong>Matematika</strong> — Komputasi, Matematika Diskret, Aljabar Linier</li><li><strong>Elektronika</strong> — Rangkaian Digital</li><li><strong>Informatika</strong> — Membuat & menguji program</li><li><strong>AI</strong> — Expert Systems, Logic Programming, Soft Computing</li></ul></div>
+          <div class="detail-section"><h6>4. Argumen</h6>
+            <p>Usaha mencari kebenaran pernyataan berupa <strong>kesimpulan</strong> berdasarkan kebenaran <strong>premis-premis</strong>.</p>
+            <div class="detail-example"><span class="label">Contoh 1 — Logis</span><p>P1: Semua mahasiswa pandai.</p><p>P2: Fafa adalah mahasiswa.</p><p><strong>K: Fafa pandai.</strong></p></div>
+            <div class="detail-example"><span class="label">Contoh 2 — Perdebatan</span><p>P1: Semua manusia bermata empat.</p><p>P2: Fuji seorang manusia.</p><p><strong>K: Fuji bermata empat.</strong></p></div></div>
+          <div class="detail-section"><h6>5. Validitas Argumen</h6>
+            <p><span class="detail-tag green">Argumen Valid — Premis Salah</span> Tetap valid karena kesimpulan mengikuti premis. Disebut <strong>tautologi</strong>.</p>
+            <div class="detail-example"><span class="label">Contoh 3</span><p>P1: Semua mamalia berkaki empat.</p><p>P2: Semua manusia adalah mamalia.</p><p><strong>K: Semua manusia berkaki empat.</strong></p></div>
+            <p><span class="detail-tag red">Argumen Tidak Valid — Kesimpulan Benar</span></p>
+            <div class="detail-example"><span class="label">Contoh 4</span><p>P1: Ada makhluk berkaki dua.</p><p>P2: Semua manusia adalah makhluk hidup.</p><p><strong>K: Semua manusia berkaki dua.</strong></p></div>
+            <div class="detail-note"><strong>Kesimpulan:</strong> Logika mempermasalahkan <em>bentuk</em> argumen, bukan <em>isi</em>.</div></div>
+          <div class="detail-section"><h6>6. Argumen Sound</h6>
+            <p>Argumen disebut <strong>sound</strong> jika <strong>(1) valid</strong> dan <strong>(2) semua premisnya benar</strong>.</p>
+            <div class="detail-example"><span class="label">Contoh 5 — Sound</span><p>P1: Semua karyawan mendapat THR.</p><p>P2: Siti adalah karyawan.</p><p><strong>K: Siti mendapat THR.</strong></p></div>
+            <div class="detail-example"><span class="label">Contoh 7 — Valid tapi Tidak Sound</span><p>P1: Semua binatang dapat terbang.</p><p>P2: Gajah adalah binatang.</p><p><strong>K: Gajah dapat terbang.</strong></p></div></div>
+          <div class="detail-section"><h6>7. Logika Klasik (Aristoteles)</h6>
+            <p>Silogisme. Elemen: <em>term of syllogism</em>.</p>
+            <ul><li><strong>Semua A adalah B</strong> (Universal Positif)</li><li><strong>Tidak ada A yang B</strong> (Universal Negatif)</li><li><strong>Beberapa A adalah B</strong> (Partikular Positif)</li><li><strong>Beberapa A bukan B</strong> (Partikular Negatif)</li></ul></div>
+          <div class="detail-section"><h6>8. Logika Modern</h6>
+            <p>De Morgan, Boole, Frege, Russell, Whitehead. Operator: <strong>AND, OR, IF...THEN..., IF AND ONLY IF</strong>.</p>
+            <p><strong>Bivalent Logic:</strong> Benar (1) atau Salah (0). Landasan <strong>Aljabar Boolean</strong>.</p>
+            <div class="detail-example"><span class="label">FPE</span><p>P = Hujan turun, Q = Jalanan basah → <strong>(P → Q)</strong></p></div></div>
+          <div class="detail-section"><h6>9. Logika Banyak Nilai & Fuzzy</h6>
+            <p><span class="detail-tag teal">Many-Valued</span> Jan Lukasiewicz (1920) — nilai ketiga: <strong>Netral</strong>.</p>
+            <p><span class="detail-tag teal">Fuzzy</span> Lotfi A. Zadeh (1973) — <strong>Himpunan Fuzzy</strong>.</p>
+            <div class="detail-example"><span class="label">Klasik vs Fuzzy</span><p><strong>Klasik:</strong> Air 37°C = "Panas = 0".</p><p><strong>Fuzzy:</strong> "Panas" 0.8, "Dingin" 0.2.</p></div></div>
+          <div class="detail-note"><strong>Next:</strong> Pertemuan 2 — Pengantar Logika Proposisional</div>
+        `},
       {no:2, judul:"Pengantar Logika Proposisional", desc:"Konsep proposisi, argumen, pemberian nilai kebenaran, dan operasi dasar logika."},
       {no:3, judul:"Tabel Kebenaran", desc:"Konstruksi tabel kebenaran untuk berbagai operator logika."},
       {no:4, judul:"Proposisi Majemuk", desc:"Ekspresi logika kompleks, skema, analisis, dan aturan pengurutan."},
