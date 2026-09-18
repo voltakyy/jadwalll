@@ -507,6 +507,140 @@ a:hover{text-decoration:underline}
   font-size:12.5px;color:#5B3D08;line-height:1.55;
 }
 
+/* ============ MK INFO CARD (Capaian + Info Mata Kuliah) ============ */
+.mk-info-section{
+  background:linear-gradient(135deg,#FAFAF9 0%,#FFFFFF 100%);
+  border:1px solid var(--border);
+  border-radius:var(--rc);
+  padding:var(--sp6);
+  margin-top:var(--sp5);
+  animation:summaryIn 700ms var(--ease-smooth) backwards;
+}
+@media(max-width:600px){.mk-info-section{padding:var(--sp5)}}
+
+.mk-info-header{
+  display:flex;align-items:flex-start;gap:var(--sp3);
+  padding-bottom:var(--sp4);margin-bottom:var(--sp5);
+  border-bottom:1px solid var(--border);
+}
+.mk-info-header-icon{
+  width:44px;height:44px;flex-shrink:0;
+  background:var(--navy);border-radius:var(--rb);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:20px;
+}
+.mk-info-header-text h3{
+  font-family:var(--fh);font-size:19px;font-weight:700;
+  color:var(--navy);margin-bottom:4px;line-height:1.3;
+}
+.mk-info-header-text p{
+  font-size:12px;color:var(--ts);letter-spacing:.04em;text-transform:uppercase;font-weight:600;
+}
+
+.mk-info-grid{
+  display:grid;
+  grid-template-columns:1.4fr 1fr;
+  gap:var(--sp6);
+  align-items:start;
+}
+@media(max-width:900px){.mk-info-grid{grid-template-columns:1fr;gap:var(--sp5)}}
+
+/* Capaian Pembelajaran */
+.capaian-section h4{
+  font-family:var(--fh);font-size:14px;font-weight:700;
+  color:var(--tp);letter-spacing:.06em;text-transform:uppercase;
+  margin-bottom:var(--sp4);display:flex;align-items:center;gap:8px;
+}
+.capaian-section h4::before{
+  content:"";width:4px;height:16px;background:var(--gold);border-radius:2px;
+}
+.capaian-grid{display:flex;flex-direction:column;gap:var(--sp3)}
+.capaian-card{
+  display:grid;grid-template-columns:40px 1fr;
+  gap:var(--sp4);
+  padding:var(--sp4);
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--rb);
+  transition:border-color 250ms var(--ease-smooth),transform 250ms var(--ease-smooth),box-shadow 250ms var(--ease-smooth);
+}
+.capaian-card:hover{
+  border-color:#C8CDD5;
+  transform:translateY(-2px);
+  box-shadow:var(--sh-sm);
+}
+.capaian-card .num{
+  width:40px;height:40px;flex-shrink:0;
+  background:var(--bg);color:var(--navy);
+  border-radius:var(--rb);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--fh);font-weight:700;font-size:14px;
+}
+.capaian-card .body h5{
+  font-family:var(--fh);font-size:14px;font-weight:700;
+  color:var(--navy);margin-bottom:5px;line-height:1.35;
+}
+.capaian-card .body p{
+  font-size:13px;color:var(--tp);line-height:1.6;
+}
+
+/* Info Mata Kuliah (kanan) */
+.mk-facts h4{
+  font-family:var(--fh);font-size:14px;font-weight:700;
+  color:var(--tp);letter-spacing:.06em;text-transform:uppercase;
+  margin-bottom:var(--sp4);display:flex;align-items:center;gap:8px;
+}
+.mk-facts h4::before{
+  content:"";width:4px;height:16px;background:var(--teal);border-radius:2px;
+}
+.fact-row{
+  display:flex;gap:var(--sp3);padding:var(--sp3) 0;
+  border-bottom:1px dashed var(--border);
+}
+.fact-row:last-child{border-bottom:none}
+.fact-row .icon{
+  width:20px;height:20px;flex-shrink:0;color:var(--navy);margin-top:1px;
+}
+.fact-row .icon svg{width:100%;height:100%;stroke-width:1.8}
+.fact-row .body{flex:1;min-width:0}
+.fact-row .label{
+  font-size:11px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ts);margin-bottom:3px;
+}
+.fact-row .value{
+  font-size:13.5px;color:var(--tp);line-height:1.55;
+}
+.fact-row .value strong{color:var(--navy);font-weight:600}
+
+/* Skala nilai compact */
+.skala-mini{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));
+  gap:6px;margin-top:8px;
+}
+.skala-mini-item{
+  text-align:center;padding:6px 4px;border-radius:6px;
+  background:var(--bg);border-left:2px solid var(--navy);font-size:11px;
+}
+.skala-mini-item .g{font-family:var(--fh);font-weight:700;color:var(--navy);font-size:13px;display:block}
+.skala-mini-item .r{color:var(--ts);font-family:'SF Mono','Fira Code',monospace;font-size:10px}
+.skala-mini-item.a{border-left-color:var(--success)}.skala-mini-item.a .g{color:var(--success)}
+.skala-mini-item.b{border-left-color:var(--teal)}.skala-mini-item.b .g{color:var(--teal)}
+.skala-mini-item.c{border-left-color:var(--gold)}.skala-mini-item.c .g{color:var(--gold)}
+.skala-mini-item.d{border-left-color:var(--warning)}.skala-mini-item.d .g{color:var(--warning)}
+.skala-mini-item.e{border-left-color:var(--danger)}.skala-mini-item.e .g{color:var(--danger)}
+
+/* Bobot bar */
+.bobot-list{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.bobot-item{
+  display:grid;grid-template-columns:1fr auto;gap:var(--sp3);
+  padding:7px 10px;background:var(--bg);border-radius:6px;
+  font-size:12.5px;align-items:center;
+}
+.bobot-item.highlight{background:#FFFBF0}
+.bobot-item .k{color:var(--tp);font-weight:500}
+.bobot-item .v{font-family:var(--fh);font-weight:700;color:var(--navy);font-size:13px}
+.bobot-item.highlight .v{color:var(--gold)}
+
 @media(prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}
   .js .reveal,.js .reveal .overview-card,.js .reveal .course-acc,.js .reveal .roadmap-item,.js .reveal .strategy-card,.js .reveal .consent-card{transition:none !important;opacity:1 !important;transform:none !important}
