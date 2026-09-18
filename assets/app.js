@@ -424,6 +424,85 @@ function initMateriPortal(){
 // Ganti seluruh fungsi ini. Tidak ada auto-check lagi.
 // ============================================================
 function initMateriDetail(kode){
+  function renderMKInfoPanel(course){
+  if(!course.deskripsi && !course.capaian && !course.kehadiran) return '';
+  
+  let capaianHtml='';
+  if(course.capaian && Array.isArray(course.capaian)){
+    capaianHtml=`
+      <div class="capaian-section">
+        <h4>Capaian Pembelajaran</h4>
+        <div class="capaian-grid">
+          ${course.capaian.map((c,i)=>{
+            if(typeof c==='string'){
+              return `<div class="capaian-card"><div class="num">${String(i+1).padStart(2,'0')}</div><div class="body"><p>${c}</p></div></div>`;
+            }
+            return `<div class="capaian-card">
+              <div class="num">${String(i+1).padStart(2,'0')}</div>
+              <div class="body">
+                <h5>${c.judul}</h5>
+                <p>${c.desc}</p>
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>`;
+  }
+
+  let factsHtml='';
+  const facts=[];
+  if(course.moda) facts.push({icon:ICONS.bookOpen, label:'Moda Pembelajaran', value:course.moda});
+  if(course.kehadiran) facts.push({icon:ICONS.cal, label:'Kehadiran', value:course.kehadiran});
+  if(course.prasyarat) facts.push({icon:ICONS.user, label:'Prasyarat', value:course.prasyarat});
+  if(course.bobot) facts.push({icon:ICONS.award||ICONS.bookOpen, label:'Ringkasan Bobot', value:course.bobot});
+
+  if(course.bobotDetail){
+    facts.push({icon:ICONS.bookOpen, label:'Rincian Penilaian', value:'', custom:`
+      <div class="bobot-list">
+        ${course.bobotDetail.map(b=>`<div class="bobot-item${b.highlight?' highlight':''}"><span class="k">${b.komponen}</span><span class="v">${b.bobot}</span></div>`).join('')}
+      </div>`});
+  }
+
+  if(course.skalaNilai){
+    facts.push({icon:ICONS.bookOpen, label:'Skala Nilai', value:'', custom:`
+      <div class="skala-mini">
+        ${course.skalaNilai.map(s=>`<div class="skala-mini-item ${s.kategori}"><span class="g">${s.grade}</span><span class="r">${s.range}</span></div>`).join('')}
+      </div>`});
+  }
+
+  if(facts.length){
+    factsHtml=`
+      <div class="mk-facts">
+        <h4>Info Mata Kuliah</h4>
+        ${facts.map(f=>`
+          <div class="fact-row">
+            <div class="icon">${f.icon}</div>
+            <div class="body">
+              <div class="label">${f.label}</div>
+              ${f.custom ? f.custom : `<div class="value">${f.value}</div>`}
+            </div>
+          </div>`).join('')}
+      </div>`;
+  }
+
+  if(!capaianHtml && !factsHtml) return '';
+
+  return `
+    <section class="mk-info-section">
+      <div class="mk-info-header">
+        <div class="mk-info-header-icon">📖</div>
+        <div class="mk-info-header-text">
+          <h3>${course.nama}</h3>
+          <p>Gambaran Mata Kuliah & Capaian</p>
+        </div>
+      </div>
+      ${course.deskripsi?`<p style="font-size:14px;color:var(--tp);line-height:1.7;margin-bottom:var(--sp5);padding-bottom:var(--sp5);border-bottom:1px dashed var(--border)">${course.deskripsi}</p>`:''}
+      <div class="mk-info-grid">
+        ${capaianHtml}
+        ${factsHtml}
+      </div>
+    </section>`;
+}
   if(typeof MATERI==='undefined'){document.querySelector('main').innerHTML='<div style="padding:48px;text-align:center"><p>Materi belum tersedia.</p><p style="margin-top:16px"><a href="materi.html" class="btn">Kembali</a></p></div>';return}
   const course=MATERI.find(m=>m.kode===kode);
   if(!course){
