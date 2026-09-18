@@ -499,6 +499,14 @@ a:hover{text-decoration:underline}
 }
 .rutin-meta-item strong{color:var(--navy);font-weight:700}
 }
+/* Note kode KRS di accordion */
+.kode-note{
+  margin-top:12px;padding:10px 14px;
+  background:#FFF8E6;border-left:3px solid var(--warning);
+  border-radius:0 var(--rb) var(--rb) 0;
+  font-size:12.5px;color:#5B3D08;line-height:1.55;
+}
+
 @media(prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}
   .js .reveal,.js .reveal .overview-card,.js .reveal .course-acc,.js .reveal .roadmap-item,.js .reveal .strategy-card,.js .reveal .consent-card{transition:none !important;opacity:1 !important;transform:none !important}
